@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ result.config.question }}</title>
+    <script src="https://cdn.plot.ly/plotly-2.26.0.min.js"></script>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        h1,
+        h3 {
+            color: #2a4365;
+        }
+
+        table.stat-table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        table.stat-table th,
+        table.stat-table td {
+            border: 1px solid #ccc;
+            text-align: center;
+            padding: 8px;
+        }
+
+        table.stat-table th {
+            background-color: #f0f8ff;
+        }
+
+        table.stat-table td {
+            background-color: #f9f9f9;
+        }
+
+        .evaluation-block {
+            border: 2px solid #ccddee;
+            background-color: #f5f9ff;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            display: inline-block;
+            width: 200px;
+            text-align: center;
+            margin: 0 10px;
+        }
+
+        .label {
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .fullscreen-btn {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+        }
+
+        #groupContainer {
+            margin-top: 30px;
+        }
+
+        .eval-column {
+            display: table-cell;
+        }
+
+        .group {
+            border: 1px solid #ccc;
+            margin: 5px 0;
+            padding: 5px 10px;
+        }
+
+        .group-header {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #f7f7f7;
+            padding: 5px;
+        }
+
+        .group-header .toggle {
+            font-weight: bold;
+            margin-right: 10px;
+            user-select: none;
+        }
+
+        .group-header .title {
+            flex: 1;
+        }
+
+        .group-header .stats {
+            font-size: 0.9em;
+            color: #555;
+            margin-left: 10px;
+        }
+
+        .group-header .summary {
+            font-size: 0.9em;
+            color: #333;
+            margin-left: 20px;
+        }
+
+        .group-children,
+        .arguments {
+            margin-left: 20px;
+            border-left: 1px dashed #ccc;
+            padding-left: 10px;
+        }
+
+        .argument {
+            margin: 5px 0;
+            padding: 3px;
+            background-color: #eef;
+        }
+
+        #toggleAll {
+            margin-bottom: 15px;
+            background-color: #3182ce;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        #toggleAll:hover {
+            background-color: #2a69ac;
+        }
+
+        #toggleEvalBtn {
+            margin-bottom: 15px;
+            background-color: #3182ce;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+
+        #toggleEvalBtn:hover {
+            background-color: #2a69ac;
+        }
+
+        .score-1 {
+            background-color: #fed7d7 !important;
+        }
+
+        .score-2 {
+            background-color: #fefcbf !important;
+        }
+
+        .score-3 {
+            background-color: #f0fff4 !important;
+        }
+
+        .score-4 {
+            background-color: #c6f6d5 !important;
+        }
+
+        .score-5 {
+            background-color: #9ae6b4 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>{{ result.config.question }}</h1>
+    <p><strong>{{ result.arguments | length }}件</strong></p>
+    <p>{{ result.overview }}</p>
+    <button id="toggleEvalBtn" onclick="toggleEvaluation()">評価を隠す</button>
+    <div id="evaluationBlock" class="evaluation-block">
+
+        <table class="stat-table">
+            <tr>
+                <th>明確さ</th>
+                <th>一貫性</th>
+                <th>整合性</th>
+                <th>差異性</th>
+                <th>まとまり具合</th>
+                <th>内訳: 中心との近さ</th>
+                <th>内訳: 他との距離</th>
+            </tr>
+            <tr>
+                <td class="score-{{ result.llm_avg_scaled.clarity }}">{{ result.llm_avg.clarity }}</td>
+                <td class="score-{{ result.llm_avg_scaled.coherence }}">{{ result.llm_avg.coherence }}</td>
+                <td class="score-{{ result.llm_avg_scaled.consistency }}">{{ result.llm_avg.consistency }}</td>
+                <td class="score-{{ result.llm_avg_scaled.distinctiveness }}">{{ result.llm_avg.distinctiveness }}</td>
+                <td class="score-{{ result.silhouette_umap_avg_scaled.silhouette_score }}">
+                    {{ result.silhouette_umap_avg.silhouette_score }}（{{ result.silhouette_umap_avg.silhouette }}）
+                </td>
+                <td class="score-{{ result.silhouette_umap_avg_scaled.centroid_score }}">
+                    {{ result.silhouette_umap_avg.centroid_score }}（{{ result.silhouette_umap_avg.centroid_dist }}）
+                </td>
+                <td class="score-{{ result.silhouette_umap_avg_scaled.nearest_score }}">
+                    {{ result.silhouette_umap_avg.nearest_score }}（{{ result.silhouette_umap_avg.nearest_dist }}）
+                </td>
+            </tr>
+
+        </table>
+        {% if distinctiveness_comment1 %}
+        <div style="margin-top: 1.5rem;">
+            <h4>🧭 差異性に関する総合評価１</h4>
+            <p style="white-space: pre-wrap;">{{ distinctiveness_comment1 }}</p>
+        </div>
+        {% endif %}
+
+        <details class="eval-help" style="margin-top:1.5rem;">
+            <summary style="font-weight:bold; cursor:pointer;">📊 評価指標の見方（クリックで開閉）</summary>
+            <div style="padding:0.8rem 1.2rem; line-height:1.6;">
+                <h4 style="margin-top:0;">1. 定性評価（文章の質を AI が採点）</h4>
+                <ul style="margin-left:1rem;">
+                    <li><b>明確さ Clarity</b> … 主語・述語がはっきりしていて “言いたいこと” が伝わるか</li>
+                    <li><b>一貫性 Coherence</b> … 文や段落の流れが自然につながっているか</li>
+                    <li><b>整合性 Consistency</b> … 意見とその説明・根拠の内容に矛盾がないか。同じクラスタ内の他の意見と比べても自然な説明になっているか</li>
+                    <li><b>差異性 Distinctiveness</b> … 他のクラスタと被らない独自性があるか</li>
+                </ul>
+                <p>AI（LLM）が 1〜5 の整数で採点します。<br>
+                    <span style="opacity:0.7;">※ あくまで目安ですが、<b>2 以下</b>は注意信号 と考えてください。</span>
+                </p>
+
+                <h4>2. 定量評価（まとまり具合のスコア）</h4>
+                <p>「クラスタ内の平均距離」と「最も近い別クラスタとの距離」を比較して得られる <b>シルエットスコア</b> を使っています。</p>
+
+                <p>シルエットスコアは、意見グループの <b>内部の密集度</b> と <b>他グループとの分離度</b> をあわせて評価する指標で、数値が高いほど「よくまとまっていて他と被っていない」状態といえます。
+                </p>
+
+                <table
+                    style="border-collapse:collapse; font-size:0.9rem; margin-top:0.3rem; table-layout: fixed; width: 60%;">
+                    <thead>
+                        <tr>
+                            <th style="border-bottom:1px solid #aaa;" colspan="6">まとまり具合（シルエットスコア）の評価基準</th>
+                        </tr>
+                        <tr>
+                            <th style="padding:2px 6px;">1</th>
+                            <th>2</th>
+                            <th>3</th>
+                            <th>4</th>
+                            <th>5</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for i in range(5) %}
+                            {% if i == 0 %}
+                            <td>{{ umap_thresholds[i] }} 未満</td>
+                            {% elif i == 4 %}
+                            <td>{{ umap_thresholds[i-1] }} 以上</td>
+                            {% else %}
+                            <td>{{ umap_thresholds[i-1] }}～{{ umap_thresholds[i] }}</td>
+                            {% endif %}
+                            {% endfor %}
+                        </tr>
+                    </tbody>
+                </table>
+
+                <p><span style="opacity:0.7;">※ 5 に近いほど「同じクラスタはギュッと密集、別クラスタとはハッキリ離れている」良い状態です。</span></p>
+
+                <p><b>補助スコア「中心との近さ」「他との距離」について：</b><br>
+                    これらは、まとまり具合スコア（シルエット）と距離情報から <u>相対的に割り振った補助評価</u>です。<br>
+                    シルエットスコアほど厳密なものではありませんが、クラスタの「中でどれだけ近いか」「他とどれだけ離れているか」の内訳傾向を知る参考になります。</p>
+                <p style="margin-top:0.6rem;">
+                    <b>活用イメージ：</b><br>
+                    ・シルエットが低いクラスタ → まずはコメント一覧を確認し、<b>別クラスタ候補の意見</b>が混ざっていないか目視チェック。<br>
+                    ・LLM スコアが 2 以下 → ラベル表現やコメント内容を再整理し、必要に応じて <b>データを修正 → レポート再生成</b>。<br>
+                    ・全体感をつかむ用途 が主眼なので、<u>個々の数値は “ざっくり傾向を知るための指標”</u> という位置付けです。<br>
+                </p>
+            </div>
+        </details>
+    </div>
+    <div class="chart-container" id="scatterChart"></div>
+
+    <h2>意見グループ一覧</h2>
+    <button id="toggleAll" onclick="toggleAllGroups()">すべて展開</button>
+    <div id="groupContainer">
+        {% macro render_group(group, parent_color='') %}
+        {%- if group.level == 1 -%}
+        {%- set my_color = color_map[group.id] -%}
+        {%- else -%}
+        {%- set my_color = parent_color -%}
+        {%- endif -%}
+        <div class="group" data-group-id="{{ group.id }}">
+            <div class="group-header" onclick="toggleThisGroup(this)" style="color: {{ my_color }};">
+                <span class="toggle">[+]</span>
+                <span class="title">{{ group.label }}</span>
+                {% set total = result.arguments | length %}
+                {% set percentage = (group.value / total * 100) if total > 0 else 0 %}
+                <span class="stats">{{ group.value }}件 ({{ "%.1f"|format(percentage) }}%)</span>
+            </div>
+            <div class="summary">{{ group.takeaway }}</div>
+
+            <div class="evaluation" style="margin: 10px 0 10px 10px;">
+                <div id="evaluationBlock" class="evaluation-block">
+                    <table class="stat-table">
+                        <tr>
+                            <th>明確さ</th>
+                            <th>一貫性</th>
+                            <th>整合性</th>
+                            <th>差異性</th>
+                            <th>まとまり具合</th>
+                            <th>内訳: 中心との近さ</th>
+                            <th>内訳: 他との距離</th>
+                        </tr>
+                        <tr>
+                            <td class="score-{{ group.scores.clarity.scaled | int }}">{{ group.scores.clarity.scaled }}
+                            </td>
+                            <td class="score-{{ group.scores.coherence.scaled | int }}">{{ group.scores.coherence.scaled
+                                }}</td>
+                            <td class="score-{{ group.scores.consistency.scaled | int }}">{{
+                                group.scores.consistency.scaled }}</td>
+                            <td class="score-{{ group.scores.distinctiveness.scaled | int }}">{{
+                                group.scores.distinctiveness.scaled }}</td>
+                            <td class="score-{{ group.scores.umap.scaled | int }}">{{ group.scores.umap.scaled }}（{{
+                                "%.3f"|format(group.scores.umap.raw) if group.scores.umap.raw is number else "N/A" }}）
+                            </td>
+                            <td class="score-{{ group.scores.umap.centroid_score | default(0) | int }}">{{
+                                group.scores.umap.centroid_score | default("N/A") }}（{{
+                                "%.3f"|format(group.scores.umap.centroid) if group.scores.umap.centroid is number else
+                                "N/A" }}）</td>
+                            <td class="score-{{ group.scores.umap.nearest_score | default(0) | int }}">{{
+                                group.scores.umap.nearest_score | default("N/A") }}（{{
+                                "%.3f"|format(group.scores.umap.nearest) if group.scores.umap.nearest is number else
+                                "N/A" }}）</td>
+                        </tr>
+                    </table>
+
+                    <div class="evaluation" style="margin: 10px 0 10px 10px;">
+                        <strong>評価コメント:</strong> {{ group.llm.comment or "（なし）" }}
+                    </div>
+                </div>
+            </div>
+
+            {% if group.level == 1 %}
+            <div class="group-children" style="display: none;">
+                {% for child in group.children %}
+                {{ render_group(child, my_color) }}
+                {% endfor %}
+            </div>
+            {% else %}
+            {%- if group.children and group.children|length > 0 -%}
+            <div class="group-children" style="display: none;">
+                {% for child in group.children %}
+                {{ render_group(child, my_color) }}
+                {% endfor %}
+            </div>
+            {%- else -%}
+            {% set group_args = result.arguments | selectattr("cluster_ids", "search", group.id) | list %}
+            {% if group_args | length > 0 %}
+            <div class="arguments" style="display: none;">
+                <table class="stat-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 65%;">意見</th>
+                            <th class="eval-column">まとまり具合</th>
+                            <th class="eval-column">内訳: 中心との近さ</th>
+                            <th class="eval-column">内訳: 他との距離</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for arg in group_args %}
+                        <tr>
+                            <td style="text-align: left;">{{ arg.argument }}</td>
+                            <td class="eval-column score-{{ arg.silhouette.umap.scaled }}">{{ arg.silhouette.umap.scaled
+                                }}（{{ "%.3f"|format(arg.silhouette.umap.raw) if arg.silhouette.umap.raw is number else
+                                "N/A" }}）</td>
+                            <td class="eval-column score-{{ arg.silhouette.umap.centroid_score | default(0) }}">{{
+                                arg.silhouette.umap.centroid_score | default("N/A") }}（{{
+                                "%.3f"|format(arg.silhouette.umap.centroid) if arg.silhouette.umap.centroid is number
+                                else "N/A" }}）</td>
+                            <td class="eval-column score-{{ arg.silhouette.umap.nearest_score | default(0) }}">{{
+                                arg.silhouette.umap.nearest_score | default("N/A") }}（{{
+                                "%.3f"|format(arg.silhouette.umap.nearest) if arg.silhouette.umap.nearest is number else
+                                "N/A" }}）</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+            {%- endif -%}
+            {% endif %}
+        </div>
+        {% endmacro %}
+
+        {% for group in cluster_tree %}
+        {{ render_group(group) }}
+        {% endfor %}
+    </div>
+
+    <script>
+        function toggleThisGroup(headerElem) {
+            const groupElem = headerElem.parentElement;
+            const toggleElem = headerElem.querySelector(".toggle");
+            const childContainer = groupElem.querySelector(".group-children") || groupElem.querySelector(".arguments");
+            if (childContainer) {
+                if (childContainer.style.display === "none") {
+                    childContainer.style.display = "block";
+                    toggleElem.textContent = "[-]";
+                } else {
+                    childContainer.style.display = "none";
+                    toggleElem.textContent = "[+]";
+                }
+            }
+        }
+
+        function toggleAllGroups() {
+            const btn = document.getElementById("toggleAll");
+            const groups = document.querySelectorAll("#groupContainer .group");
+            const expand = btn.textContent === "すべて展開";
+            groups.forEach(group => {
+                const header = group.querySelector(".group-header");
+                const toggleElem = header.querySelector(".toggle");
+                const childContainer = group.querySelector(".group-children") || group.querySelector(".arguments");
+                if (childContainer) {
+                    childContainer.style.display = expand ? "block" : "none";
+                    toggleElem.textContent = expand ? "[-]" : "[+]";
+                }
+            });
+            btn.textContent = expand ? "すべて閉じる" : "すべて展開";
+        }
+
+        const result = {{ result | tojson }};
+        const color_map = {{ color_map | tojson }};
+
+        const clusters = result.clusters.filter(c => c.level === 2);
+        const args = result.arguments;
+
+        const scatterData = clusters.map((cluster, idx) => {
+            const clusterArgs = args.filter(arg => arg.cluster_ids.includes(cluster.id));
+            const x = clusterArgs.map(arg => arg.x);
+            const y = clusterArgs.map(arg => arg.y);
+
+            let color = "";
+            if (cluster.parent && color_map[cluster.parent]) {
+                color = color_map[cluster.parent];
+            } else {
+                color = `hsl(${(idx * 40) % 360},70%,60%)`;
+            }
+
+            return {
+                x: x,
+                y: y,
+                mode: "markers",
+                type: "scatter",
+                name: cluster.label,
+                marker: { color: color, size: 7 },
+                text: clusterArgs.map(arg => `<b>${cluster.label}</b><br>${arg.argument.replace(/(.{30})/g, "$1<br>")}`),
+                hoverinfo: "text"
+            };
+        });
+
+        const level1Clusters = result.clusters.filter(c => c.level === 1);
+        const annotations = level1Clusters.map(cluster => {
+            const clusterArgs = result.arguments.filter(arg => arg.cluster_ids.includes(cluster.id));
+            if (clusterArgs.length > 0) {
+                const sumX = clusterArgs.reduce((sum, arg) => sum + arg.x, 0);
+                const sumY = clusterArgs.reduce((sum, arg) => sum + arg.y, 0);
+                const centerX = sumX / clusterArgs.length;
+                const centerY = sumY / clusterArgs.length;
+                return {
+                    x: centerX,
+                    y: centerY,
+                    xref: "x",
+                    yref: "y",
+                    text: cluster.label,
+                    showarrow: false,
+                    font: { color: "#fff", size: 14 },
+                    bgcolor: color_map[cluster.id] || "#000",
+                    opacity: 0.8
+                };
+            }
+            return null;
+        }).filter(ann => ann !== null);
+
+        Plotly.newPlot("scatterChart", scatterData, {
+            margin: { l: 20, r: 20, t: 20, b: 20 },
+            xaxis: { showticklabels: false, zeroline: false },
+            yaxis: { showticklabels: false, zeroline: false },
+            hovermode: "closest",
+            showlegend: false,
+            annotations: annotations
+        }, { responsive: true });
+        function toggleEvaluation() {
+            const blocks = document.querySelectorAll(".evaluation-block");
+            const btn = document.getElementById("toggleEvalBtn");
+            const evalCols = document.querySelectorAll(".eval-column");
+
+            const currentlyHidden = Array.from(blocks).every(b => b.style.display === "none");
+
+            blocks.forEach(b => {
+                b.style.display = currentlyHidden ? "block" : "none";
+            });
+
+            evalCols.forEach(el => {
+                el.style.display = currentlyHidden ? "table-cell" : "none";
+            });
+
+            btn.textContent = currentlyHidden ? "評価を隠す" : "評価を表示";
+        }
+    </script>
+</body>
+
+</html>

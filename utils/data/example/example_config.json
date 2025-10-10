@@ -1,0 +1,127 @@
+{
+  "input": "example1",
+  "question": "人類が人工知能を開発・展開する上で、最優先すべき課題は何でしょうか？",
+  "intro": "このAI生成レポートは、パブリックコメントにおいて寄せられた意見に基づいています。",
+  "comments": [
+    {
+      "id": "321",
+      "body": "AI should be in line with democratic principles, but it is not a Western democracy. It should be in line with democracies around the world."
+    },
+    {
+      "id": "341",
+      "body": "Public awareness, education, and participation around AI and the environment need to be improved."
+    },
+    {
+      "id": "340",
+      "body": "The benefits and risks of AI systems should be equitably distributed, not concentrated among a few groups."
+    },
+    {
+      "id": "339",
+      "body": "AI should not automate or control critical environmental decisions without human oversight."
+    },
+    {
+      "id": "338",
+      "body": "Caution and care, not speed, should guide the development and deployment of transformative AI applications."
+    },
+    {
+      "id": "337",
+      "body": "AI systems should promote justice, empowerment, and environmental stewardship, not just efficiency and profit."
+    },
+    {
+      "id": "336",
+      "body": "AI governance frameworks must include environmental representatives and consider ecological impacts."
+    },
+    {
+      "id": "335",
+      "body": "AI should be leveraged to help monitor, model, and ultimately reduce humanity's environmental footprint."
+    },
+    {
+      "id": "334",
+      "body": "AI researchers and developers have an ethical responsibility to consider the environmental impacts of their work."
+    },
+    {
+      "id": "333",
+      "body": "Comprehensive life cycle assessments should be conducted for AI systems to understand their environmental footprints."
+    },
+    {
+      "id": "332",
+      "body": "AI systems should be designed and deployed with sustainability in mind, considering environmental impacts like energy use, materials & waste"
+    },
+    {
+      "id": "331",
+      "body": "AI development should encourage innovation & ensure the benefits are accessible to all, irrespective of geographic or economic barriers."
+    },
+    {
+      "id": "330",
+      "body": "AI tech should have a comprehensive risk assessment evaluating not just the environmental impact but also societal & ethical implications."
+    },
+    {
+      "id": "329",
+      "body": "Strict data privacy regulations should be in place to protect individuals from unauthorized data collection and usage by AI systems."
+    },
+    {
+      "id": "328",
+      "body": "AI should be developed and deployed with a focus on solving pressing societal challenges, rather than solely for profit."
+    },
+    {
+      "id": "327",
+      "body": "AI technologies should strive to be as energy-efficient as possible to mitigate their environmental impact."
+    },
+    {
+      "id": "326",
+      "body": "While global standards are ideal, it's crucial to have localized AI regulations that respect cultural and societal norms."
+    },
+    {
+      "id": "325",
+      "body": "AI development should adhere to a universally accepted ethical framework that prioritizes human well-being and environmental sustainability."
+    },
+    {
+      "id": "324",
+      "body": "The governance of AI should involve a diverse set of stakeholders, including civil society, academia, and industry."
+    },
+    {
+      "id": "323",
+      "body": "There should be a concerted effort to educate the public about the capabilities, limitations, and ethical considerations of AI."
+    },
+    {
+      "id": "322",
+      "body": "All entities involved in AI development should disclose the methodologies and data sets they use, to ensure ethical and unbiased AI systems."
+    },
+    {
+      "id": "295",
+      "body": "Governments must expand access to data while protecting privacy to enable AI for good."
+    },
+    {
+      "id": "320",
+      "body": "Global cooperation on AI governance is crucial to manage environmental transformations ahead."
+    },
+    {
+      "id": "319",
+      "body": "To realize sustainability benefits, AI deployment must respect nature and human dignity."
+    },
+    {
+      "id": "318",
+      "body": "AI can drive optimization but also increased consumption - sustainable values should guide its design."
+    },
+    {
+      "id": "317",
+      "body": "AI has potential environmental risks we must monitor and mitigate, like energy usage and e-waste."
+    },
+    {
+      "id": "316",
+      "body": "Robotics and automation can reduce mining impacts but may increase energy demands - requiring planning."
+    },
+    {
+      "id": "315",
+      "body": "AI modeling of extreme weather helps societies build resilience and adapt to climate change."
+    }
+  ],
+  "cluster": [3, 6],
+  "model": "gpt-4o-mini",
+  "prompt": {
+    "extraction": "/system\nあなたは専門的なリサーチアシスタントで、整理された議論のデータセットを作成するお手伝いをする役割です。\n人工知能に関する公開協議を実施した状況を想定しています。一般市民から寄せられた議論の例を提示しますので、それらをより簡潔で読みやすい形に整理するお手伝いをお願いします。必要な場合は2つの別個の議論に分割することもできますが、多くの場合は1つの議論にまとめる方が望ましいでしょう。\n結果は整形されたJSON形式の文字列リストとして返してください。\n要約は必ず日本語で作成してください。\n\n/human\n\nAIテクノロジーは、そのライフサイクル全体における環境負荷を削減することに焦点を当てて開発されるべきです。\n\n/ai\n\n[\n  \"AIテクノロジーの環境負荷削減に焦点を当てるべき\"\n]\n\n/human\n\nAIの能力、限界、倫理的考慮事項について、一般市民を教育する協調的な取り組みが必要です。\n\n/ai\n\n[\n  \"AIの能力について一般市民を教育すべき\",\n  \"AIの限界と倫理的考慮事項について一般市民を教育すべき\"\n]\n\n/human\n\nAIはスマートホームやビルのエネルギー効率と居住者の快適性を最適化できます。\n\n/ai\n\n[\n  \"AIはスマートホームやビルのエネルギー効率と居住者の快適性を最適化できる\"\n]\n\n/human\n\nAIはエネルギーグリッドを最適化し、無駄や炭素排出を削減できます。\n\n/ai\n\n[\n  \"AIはエネルギーグリッドを最適化して無駄と炭素排出を削減できる\"\n]",
+    "initial_labelling": "あなたはKJ法が得意なデータ分析者です。userのinputはグループに集まったラベルです。なぜそのラベルが一つのグループであるか解説して、それから表札をつけてください。\n出力はJSONとし、フォーマットは以下のサンプルを参考にしてください。\n\n\n# サンプルの入出力\n## 入力例\n最近、政治家が能登の復興に向けた具体的なプランを発表し、地域の未来に明るい希望が見えてきました。市民として、真摯な取り組みに感謝しています。\n災害復興支援が、選挙期間中にしっかり議論されるようになり、政治家が国民の本当のニーズに応える姿勢に期待しています。\n選挙を通じて、政治家が地域振興に全力で取り組む姿勢が伝わってきます。具体的な政策提案を目にするたび、未来への希望が膨らみます。\n\n\n## 出力例\n{{\n    \"label\": \"市民の未来を支える具体的政策への期待\",\n    \"description\": \"このクラスタには、地域の復興や被害者支援など、実際の社会課題に対して政治家が具体的かつ積極的に取り組む姿勢を支持する前向きな意見が集まっています。市民は、選挙や政策議論を通じて、現実の問題に即した支援策や復興計画が実現されることを期待し、明るい未来の構築に向けた政治の変革を応援しています。\"\n}}",
+    "merge_labelling": "分割されすぎたクラスタを統合する必要があるので、統合後の名称を考えて出力して。\\n\\n# 指示\\n* 統合前のクラスタの名称・説明および統合後のクラスタに属するデータ点のサンプルを与えるので、これらに基づいて統合後のクラスタの名称を出力してください\\n    * 統合後のクラスタ名において、統合前のクラスタ名をそのまま使うことは避けてください。\\n* 出力例に記載したJSONのフォーマットに従って出力してください\\n\\n# サンプルの入出力\\n## 入力例（クラスタラベル:説明文）\\n- 地域の災害対応への批判: このクラスタは、地域における災害対応策の実施や体制に対する批判的な意見を集約したものです。住民からは、迅速かつ効果的な支援が行われていない点や、情報提供・連携の不足などに対する強い不満が表明されています。\\n- 災害対応への不満: このクラスタは、災害発生時の対応全般に対する不満を示す意見をまとめたものです。救援活動の遅れや支援策の実効性に疑問を持つ声が多く、より積極的で透明性のある対応を求める意見が特徴です。\\n- 地域復興の遅れ: このクラスタは、災害後の地域復興プロセスが予定通りに進んでいない点に対する懸念や不満を反映しています。再建計画や支援策の実施の遅延、そしてそれに伴う住民の生活再建への影響が強調されています。\\n\\n\\n## 出力例\\n{{\\n    \\\"label\\\": \\\"地域再生と災害支援に対する期待と懸念\\\",\\n    \\\"description\\\": \\\"このクラスタは、特定の地域における再生や災害支援策に対し、具体的な取り組みが不足しているとの意見を集約しています。市民は、選挙を通じた政策議論の中で、地域復興や被災者支援を最優先すべきだとの期待と、現行の支援策に対する改善要求を強く表明しており、より効果的な政府の対応を求める声が反映されています。\\\"\\n}}",
+    "overview": "/system \nあなたはシンクタンクで働く専門のリサーチアシスタントです。チームは特定のテーマに関してパブリック・コンサルテーションを実施し、異なる選択肢のクラスターを分析し始めています。これからクラスターのリストとその簡単な分析が提供されます。あなたの仕事は、調査結果の簡潔な要約を返すことです。要約は非常に簡潔に（最大で1段落、最大4文）まとめ、無意味な言葉を避けてください。出力は日本語で行ってください。"
+  }
+}

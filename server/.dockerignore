@@ -1,0 +1,53 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# データファイル（必要なものは除く）
+data/*.csv
+data/*.json
+data/raw/
+data/processed/
+
+# テスト
+.pytest_cache/
+.coverage
+htmlcov/
+
+# 環境変数（本番環境では別途設定）
+.env
+
+# エディタ/IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ログ
+*.log
+
+
+broadlistening/pipeline/inputs/*
+broadlistening/pipeline/configs/*
+broadlistening/pipeline/outputs/*

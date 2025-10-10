@@ -1,0 +1,44 @@
+# Environment
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env-sample
+.env.azure
+.env.azure.generated
+
+# Node
+node_modules/
+client/node_modules/
+client-admin/node_modules/
+utils/dummy-server/node_modules/
+
+# Next.js
+client/.next/
+client-admin/.next/
+out/
+dist/
+
+# Python
+__pycache__/
+**/__pycache__/
+.venv/
+server/.venv/
+
+# Generated
+.azure/generated/
+
+# OS
+.DS_Store
+.env.azure.generated
+.env.azure
+.env
+.idea
+.next
+.DS_Store
+.azure/generated
+node_modules
+docker-compose.override.y*ml
+out
+lefthook-local.yml
+dist

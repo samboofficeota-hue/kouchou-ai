@@ -1,0 +1,47 @@
+{
+    "name": "日本の未来について",
+    "question": "日本の未来に対してどんな意見が寄せられているのか？",
+    "input": "dummy-comments-japan",
+    "model": "gpt-4o-mini",
+    "extraction": {
+      "workers": 3,
+      "limit": 20,
+      "properties":[
+        "source",
+        "age"
+      ],
+      "categories": {
+        "sentiment": {
+          "positive": "肯定的な意見につけるカテゴリ",
+          "negative": "否定的な意見につけるカテゴリ",
+          "neutral": "中立的な意見につけるカテゴリ"
+        },
+        "genre":{
+          "politics": "政治に関する意見",
+          "economy": "経済に関する意見",
+          "society": "社会に関する意見",
+          "environment": "環境に関する意見",
+          "education": "教育に関する意見",
+          "health": "健康に関する意見",
+          "culture": "文化に関する意見",
+          "others": "その他"
+        }
+      },
+      "category_batch_size": 5
+    },
+    "clustering": {
+      "clusters": 3
+    },
+    "aggregation": {
+      "hidden_properties": {
+        "source": [
+          "X API"
+        ],
+        "age": [
+          20,
+          25
+        ]
+      }
+    },
+    "intro": "このAI生成レポートは、LLMによって生成されたダミーデータに対して分析を行っています。"
+  }

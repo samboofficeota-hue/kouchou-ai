@@ -1,0 +1,17 @@
+# デフォルトでは skip: true で無効にしています。
+# 有効にしたい hook は、コメントアウトを外してしてください
+
+# pre-push:
+#   commands:
+#     client-lint:
+#       skip:
+#         - merge
+#         - rebase
+#     client-admin-lint:
+#       skip:
+#         - merge
+#         - rebase
+#     dummy-server-lint:
+#       skip:
+#         - merge
+#         - rebase

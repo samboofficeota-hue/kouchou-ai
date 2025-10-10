@@ -1,0 +1,19 @@
+pre-push:
+  parallel: true
+  commands:
+    client-lint:
+      root: "client/"
+      glob: "client/**/*.{js,mjs,jsx,ts,tsx,json}"
+      run: "npx biome check {push_files}"
+      skip: true
+    client-admin-lint:
+      root: "client-admin/"
+      glob: "client-admin/**/*.{js,mjs,jsx,ts,tsx,json}"
+      run: "npx biome check {push_files}"
+      skip: true
+    dummy-server-lint:
+      root: "utils/dummy-server/"
+      glob: "utils/dummy-server/**/*.{js,mjs,jsx,ts,tsx,json}"
+      exclude: "hierarchical_result.json"
+      run: "npx biome check {push_files}"
+      skip: true
